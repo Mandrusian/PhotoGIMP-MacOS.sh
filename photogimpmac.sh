@@ -341,7 +341,8 @@ resolve_config_source() {
 
 make_unique_backup_dir() {
     local parent_dir="$1"
-    local base_name="GIMP-backup-$(date +%Y%m%d-%H%M%S)"
+    local base_name
+    base_name="GIMP-backup-$(date +%Y%m%d-%H%M%S)"
     local candidate="$parent_dir/$base_name"
     local suffix=1
 
