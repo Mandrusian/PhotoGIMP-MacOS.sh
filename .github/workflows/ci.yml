@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check Bash syntax
+        run: |
+          bash -n photogimpmac.sh
+          bash -n tests/test_photogimpmac.sh
+
+      - name: Run ShellCheck
+        run: |
+          if command -v shellcheck >/dev/null 2>&1; then
+            shellcheck photogimpmac.sh tests/test_photogimpmac.sh
+          else
+            echo "shellcheck not available on runner"
+          fi
+
+      - name: Run smoke tests
+        run: |
+          ./tests/test_photogimpmac.sh
